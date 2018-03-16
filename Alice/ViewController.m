@@ -28,7 +28,7 @@
     self.sceneView.showsStatistics = YES;
     
     // Create a new scene
-    SCNScene *scene = [SCNScene sceneNamed:@"art.scnassets/ship.scn"];
+    SCNScene *scene = [SCNScene scene];
     
     // Set the scene to the view
     self.sceneView.scene = scene;
@@ -39,6 +39,7 @@
     
     // Create a session configuration
     ARWorldTrackingConfiguration *configuration = [ARWorldTrackingConfiguration new];
+    configuration.planeDetection = ARPlaneDetectionHorizontal;
 
     // Run the view's session
     [self.sceneView.session runWithConfiguration:configuration];
@@ -60,16 +61,20 @@
 
 #pragma mark - ARSCNViewDelegate
 
-/*
+- (void)renderer:(id<SCNSceneRenderer>)renderer didAddNode:(SCNNode *)node forAnchor:(ARAnchor *)anchor
+{
+    
+}
+
 // Override to create and configure nodes for anchors added to the view's session.
 - (SCNNode *)renderer:(id<SCNSceneRenderer>)renderer nodeForAnchor:(ARAnchor *)anchor {
-    SCNNode *node = [SCNNode new];
- 
+    SCNNode *node = [ALGiftWrappingCube new];
+
     // Add geometry to the node...
- 
+
     return node;
 }
-*/
+
 
 - (void)session:(ARSession *)session didFailWithError:(NSError *)error {
     // Present an error message to the user
@@ -90,8 +95,15 @@
 
 - (void)addGiftWrappingCube
 {
-    ALGiftWrappingCube *cube = [[ALGiftWrappingCube alloc] init];
-    [self.sceneView.scene.rootNode addChildNode:cube];
+//    ALGiftWrappingCube *cube = [[ALGiftWrappingCube alloc] init];
+//    [self.sceneView.scene.rootNode addChildNode:cube];
+//
+//    self.camer
+}
+
+- (void)addDAECube
+{
+    
 }
 
 @end
