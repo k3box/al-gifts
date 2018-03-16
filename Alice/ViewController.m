@@ -50,7 +50,7 @@
     // Run the view's session
     [self.sceneView.session runWithConfiguration:configuration];
     
-    [self addGiftWrappingCube];
+//    [self addGiftWrappingCube];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -114,21 +114,64 @@
 //    SCNVector3 position = SCNVector3Make(orientation.x, orientation.y, orientation.z - .5f);
 //    cube.worldPosition = position;
 
-    simd_float4x4 translation = matrix_identity_float4x4;
-    translation.columns[3].z = -1;
-    cube.simdTransform = matrix_multiply(self.sceneView.session.currentFrame.camera.transform, translation);
-    
+    [self setInFrontOfCameraTransformForNode:cube];
+
     [self.sceneView.scene.rootNode addChildNode:cube];
 }
 
 - (void)tap
 {
     [self addGiftWrappingCube];
+//    [self addDAECube];
+}
+
+- (void)setInFrontOfCameraTransformForNode:(SCNNode *)node
+{
+    simd_float4x4 translation = matrix_identity_float4x4;
+    translation.columns[3].z = -1;
+    node.simdTransform = matrix_multiply(self.sceneView.session.currentFrame.camera.transform, translation);
+
 }
 
 - (void)addDAECube
 {
     
+    
+////    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+////    let scene = SCNScene(named: documentsURL.absoluteString+"idle.dae")
+//
+////    NSString * resourcePath = [[NSBundle mainBundle] pathForResource:@"Excited" ofType:nil];
+//    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
+//    NSString * resourcePath = [bundle pathForResource:@"eyes" ofType:@"png"];
+//
+//    NSError *e = nil;
+////
+////    NSArray *es = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:&e];
+////
+////    NSURL *documentsURL = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].lastObject;
+////    NSArray *a = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:documentsURL includingPropertiesForKeys:nil options:kNilOptions error:&e];
+//
+////    NSString *name = [resourcePath stringByAppendingPathComponent:@"Excited"];
+////    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:name isDirectory:nil];
+//
+//    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:resourcePath isDirectory:nil];
+//    NSData *data = [NSData dataWithContentsOfFile:resourcePath];
+//
+////    SCNSceneSource *scr = [SCNSceneSource sceneSourceWithData:data options:nil];
+////    SCNScene *knucklesExcitedScene = [scr sceneWithOptions:nil error:&e];
+////    SCNScene *knucklesExcitedScene = [SCNScene
+
+    UIImage *eyes = [UIImage imageNamed:@"eyes"];
+    
+//    SCNScene *scene = [SCNScene sceneNamed:@"art.scnassets/Excited.dae"];
+    
+    SCNScene *scene1 = [SCNScene sceneNamed:@"art.scnassets/ship.scn"];
+
+//
+//    for (SCNNode *node in knucklesExcitedScene.rootNode.childNodes) {
+//        [self setInFrontOfCameraTransformForNode:node];
+//        [self.sceneView.scene.rootNode addChildNode:node];
+//    }
 }
 
 @end

@@ -21,7 +21,7 @@
         self.physicsBody = [SCNPhysicsBody bodyWithType:SCNPhysicsBodyTypeDynamic shape:shape];
         [self.physicsBody setAffectedByGravity:NO];
         SCNMaterial *material = [SCNMaterial material];
-        material.diffuse.contents = [UIImage imageNamed:@"valentineTexture"];
+        material.diffuse.contents = [UIImage imageNamed:@"cherries"];
         self.geometry.materials = @[material, material, material, material, material, material];
     }
     return self;

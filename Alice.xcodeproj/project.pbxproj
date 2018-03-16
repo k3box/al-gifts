@@ -15,6 +15,8 @@
 		5D10589D205C376200F3EA84 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D10589B205C376200F3EA84 /* LaunchScreen.storyboard */; };
 		5D1058A0205C376200F3EA84 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D10589F205C376200F3EA84 /* main.m */; };
 		5D1058B4205C469E00F3EA84 /* ALGiftWrappingCube.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D1058B2205C469E00F3EA84 /* ALGiftWrappingCube.m */; };
+		5D278F94205C7C68006C39A3 /* eyes.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D278F91205C7C68006C39A3 /* eyes.png */; };
+		5D278F95205C7C68006C39A3 /* color.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D278F92205C7C68006C39A3 /* color.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +33,8 @@
 		5D10589F205C376200F3EA84 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		5D1058B2205C469E00F3EA84 /* ALGiftWrappingCube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALGiftWrappingCube.m; path = Alice/Gifts/Wrappings/Cube/ALGiftWrappingCube.m; sourceTree = SOURCE_ROOT; };
 		5D1058B3205C469E00F3EA84 /* ALGiftWrappingCube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALGiftWrappingCube.h; path = Alice/Gifts/Wrappings/Cube/ALGiftWrappingCube.h; sourceTree = SOURCE_ROOT; };
+		5D278F91205C7C68006C39A3 /* eyes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eyes.png; sourceTree = "<group>"; };
+		5D278F92205C7C68006C39A3 /* color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = color.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +67,7 @@
 		5D10588D205C376200F3EA84 /* Alice */ = {
 			isa = PBXGroup;
 			children = (
+				5D278F8F205C7BDC006C39A3 /* Resources */,
 				5D1058AF205C467500F3EA84 /* Gifts */,
 				5D10588E205C376200F3EA84 /* AppDelegate.h */,
 				5D10588F205C376200F3EA84 /* AppDelegate.m */,
@@ -102,6 +107,15 @@
 				5D1058B2205C469E00F3EA84 /* ALGiftWrappingCube.m */,
 			);
 			path = Cube;
+			sourceTree = "<group>";
+		};
+		5D278F8F205C7BDC006C39A3 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5D278F92205C7C68006C39A3 /* color.png */,
+				5D278F91205C7C68006C39A3 /* eyes.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -162,10 +176,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5D278F95205C7C68006C39A3 /* color.png in Resources */,
 				5D105892205C376200F3EA84 /* art.scnassets in Resources */,
 				5D10589D205C376200F3EA84 /* LaunchScreen.storyboard in Resources */,
 				5D10589A205C376200F3EA84 /* Assets.xcassets in Resources */,
 				5D105898205C376200F3EA84 /* Main.storyboard in Resources */,
+				5D278F94205C7C68006C39A3 /* eyes.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
