@@ -20,12 +20,17 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
+    
+    UITapGestureRecognizer *rec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
+    rec.numberOfTapsRequired = 1;
+    [self.sceneView addGestureRecognizer:rec];
+    
     // Set the view's delegate
     self.sceneView.delegate = self;
     
     // Show statistics such as fps and timing information
     self.sceneView.showsStatistics = YES;
+    self.sceneView.debugOptions = ARSCNDebugOptionShowFeaturePoints;
     
     // Create a new scene
     SCNScene *scene = [SCNScene scene];
@@ -40,6 +45,7 @@
     // Create a session configuration
     ARWorldTrackingConfiguration *configuration = [ARWorldTrackingConfiguration new];
     configuration.planeDetection = ARPlaneDetectionHorizontal;
+//    self.sceneView.automaticallyUpdatesLighting = YES;
 
     // Run the view's session
     [self.sceneView.session runWithConfiguration:configuration];
@@ -63,16 +69,24 @@
 
 - (void)renderer:(id<SCNSceneRenderer>)renderer didAddNode:(SCNNode *)node forAnchor:(ARAnchor *)anchor
 {
-    
+    [self addGiftWrappingCube];
+//    [self.sceneView pause:self];
+//    self.sceneView.backgroundColor = [UIColor yellowColor];
+//    [NSThread sleepForTimeInterval:.5];
+//    self.sceneView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.f];
+//    [self.sceneView play:self];
 }
 
 // Override to create and configure nodes for anchors added to the view's session.
 - (SCNNode *)renderer:(id<SCNSceneRenderer>)renderer nodeForAnchor:(ARAnchor *)anchor {
-    SCNNode *node = [ALGiftWrappingCube new];
+    SCNNode *cube = [ALGiftWrappingCube new];
+    SCNVector3 position = self.sceneView.pointOfView.position;
+    position.z -= 0.5f;
+    cube.position = position;
 
     // Add geometry to the node...
 
-    return node;
+    return cube;
 }
 
 
@@ -96,9 +110,15 @@
 - (void)addGiftWrappingCube
 {
 //    ALGiftWrappingCube *cube = [[ALGiftWrappingCube alloc] init];
+//    SCNVector3 position = self.sceneView.pointOfView.position;
+//    position.z -= 0.5f;
+//    cube.position = position;
 //    [self.sceneView.scene.rootNode addChildNode:cube];
-//
-//    self.camer
+}
+
+- (void)tap
+{
+    [self addGiftWrappingCube];
 }
 
 - (void)addDAECube
