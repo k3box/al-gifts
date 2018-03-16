@@ -7,6 +7,7 @@
 //
 
 #import "ViewController.h"
+#import "ALGiftWrappingCube.h"
 
 @interface ViewController () <ARSCNViewDelegate>
 
@@ -41,6 +42,8 @@
 
     // Run the view's session
     [self.sceneView.session runWithConfiguration:configuration];
+    
+    [self addGiftWrappingCube];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -81,6 +84,14 @@
 - (void)sessionInterruptionEnded:(ARSession *)session {
     // Reset tracking and/or remove existing anchors if consistent tracking is required
     
+}
+
+#pragma mark private functions
+
+- (void)addGiftWrappingCube
+{
+    ALGiftWrappingCube *cube = [[ALGiftWrappingCube alloc] init];
+    [self.sceneView.scene.rootNode addChildNode:cube];
 }
 
 @end

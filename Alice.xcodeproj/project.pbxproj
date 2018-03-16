@@ -14,6 +14,7 @@
 		5D10589A205C376200F3EA84 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5D105899205C376200F3EA84 /* Assets.xcassets */; };
 		5D10589D205C376200F3EA84 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5D10589B205C376200F3EA84 /* LaunchScreen.storyboard */; };
 		5D1058A0205C376200F3EA84 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D10589F205C376200F3EA84 /* main.m */; };
+		5D1058B4205C469E00F3EA84 /* ALGiftWrappingCube.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D1058B2205C469E00F3EA84 /* ALGiftWrappingCube.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,8 @@
 		5D10589C205C376200F3EA84 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5D10589E205C376200F3EA84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5D10589F205C376200F3EA84 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		5D1058B2205C469E00F3EA84 /* ALGiftWrappingCube.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ALGiftWrappingCube.m; path = Alice/Gifts/Wrappings/Cube/ALGiftWrappingCube.m; sourceTree = SOURCE_ROOT; };
+		5D1058B3205C469E00F3EA84 /* ALGiftWrappingCube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALGiftWrappingCube.h; path = Alice/Gifts/Wrappings/Cube/ALGiftWrappingCube.h; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,6 +63,7 @@
 		5D10588D205C376200F3EA84 /* Alice */ = {
 			isa = PBXGroup;
 			children = (
+				5D1058AF205C467500F3EA84 /* Gifts */,
 				5D10588E205C376200F3EA84 /* AppDelegate.h */,
 				5D10588F205C376200F3EA84 /* AppDelegate.m */,
 				5D105891205C376200F3EA84 /* art.scnassets */,
@@ -72,6 +76,32 @@
 				5D10589F205C376200F3EA84 /* main.m */,
 			);
 			path = Alice;
+			sourceTree = "<group>";
+		};
+		5D1058AF205C467500F3EA84 /* Gifts */ = {
+			isa = PBXGroup;
+			children = (
+				5D1058B0205C468400F3EA84 /* Wrappings */,
+			);
+			name = Gifts;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		5D1058B0205C468400F3EA84 /* Wrappings */ = {
+			isa = PBXGroup;
+			children = (
+				5D1058B1205C468A00F3EA84 /* Cube */,
+			);
+			path = Wrappings;
+			sourceTree = "<group>";
+		};
+		5D1058B1205C468A00F3EA84 /* Cube */ = {
+			isa = PBXGroup;
+			children = (
+				5D1058B3205C469E00F3EA84 /* ALGiftWrappingCube.h */,
+				5D1058B2205C469E00F3EA84 /* ALGiftWrappingCube.m */,
+			);
+			path = Cube;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +177,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D105895205C376200F3EA84 /* ViewController.m in Sources */,
+				5D1058B4205C469E00F3EA84 /* ALGiftWrappingCube.m in Sources */,
 				5D1058A0205C376200F3EA84 /* main.m in Sources */,
 				5D105890205C376200F3EA84 /* AppDelegate.m in Sources */,
 			);
