@@ -30,7 +30,7 @@
     
     // Show statistics such as fps and timing information
     self.sceneView.showsStatistics = YES;
-    self.sceneView.debugOptions = ARSCNDebugOptionShowFeaturePoints;
+//    self.sceneView.debugOptions = ARSCNDebugOptionShowFeaturePoints;
     
     // Create a new scene
     SCNScene *scene = [SCNScene scene];
@@ -67,27 +67,27 @@
 
 #pragma mark - ARSCNViewDelegate
 
-- (void)renderer:(id<SCNSceneRenderer>)renderer didAddNode:(SCNNode *)node forAnchor:(ARAnchor *)anchor
-{
-    [self addGiftWrappingCube];
-//    [self.sceneView pause:self];
-//    self.sceneView.backgroundColor = [UIColor yellowColor];
-//    [NSThread sleepForTimeInterval:.5];
-//    self.sceneView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.f];
-//    [self.sceneView play:self];
-}
-
-// Override to create and configure nodes for anchors added to the view's session.
-- (SCNNode *)renderer:(id<SCNSceneRenderer>)renderer nodeForAnchor:(ARAnchor *)anchor {
-    SCNNode *cube = [ALGiftWrappingCube new];
-    SCNVector3 position = self.sceneView.pointOfView.position;
-    position.z -= 0.5f;
-    cube.position = position;
-
-    // Add geometry to the node...
-
-    return cube;
-}
+//- (void)renderer:(id<SCNSceneRenderer>)renderer didAddNode:(SCNNode *)node forAnchor:(ARAnchor *)anchor
+//{
+//    [self addGiftWrappingCube];
+////    [self.sceneView pause:self];
+////    self.sceneView.backgroundColor = [UIColor yellowColor];
+////    [NSThread sleepForTimeInterval:.5];
+////    self.sceneView.backgroundColor = [UIColor colorWithWhite:0.f alpha:0.f];
+////    [self.sceneView play:self];
+//}
+//
+//// Override to create and configure nodes for anchors added to the view's session.
+//- (SCNNode *)renderer:(id<SCNSceneRenderer>)renderer nodeForAnchor:(ARAnchor *)anchor {
+//    SCNNode *cube = [ALGiftWrappingCube new];
+//    SCNVector3 position = self.sceneView.pointOfView.position;
+//    position.z -= 0.5f;
+//    cube.position = position;
+//
+//    // Add geometry to the node...
+//
+//    return cube;
+//}
 
 
 - (void)session:(ARSession *)session didFailWithError:(NSError *)error {
@@ -109,11 +109,16 @@
 
 - (void)addGiftWrappingCube
 {
-//    ALGiftWrappingCube *cube = [[ALGiftWrappingCube alloc] init];
-//    SCNVector3 position = self.sceneView.pointOfView.position;
-//    position.z -= 0.5f;
-//    cube.position = position;
-//    [self.sceneView.scene.rootNode addChildNode:cube];
+    ALGiftWrappingCube *cube = [[ALGiftWrappingCube alloc] init];
+//    SCNQuaternion orientation = self.sceneView.pointOfView.worldOrientation;
+//    SCNVector3 position = SCNVector3Make(orientation.x, orientation.y, orientation.z - .5f);
+//    cube.worldPosition = position;
+
+    simd_float4x4 translation = matrix_identity_float4x4;
+    translation.columns[3].z = -1;
+    cube.simdTransform = matrix_multiply(self.sceneView.session.currentFrame.camera.transform, translation);
+    
+    [self.sceneView.scene.rootNode addChildNode:cube];
 }
 
 - (void)tap
