@@ -1,0 +1,43 @@
+# Xcode
+#
+build/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata
+*.xccheckout
+*.moved-aside
+DerivedData
+*.hmap
+*.ipa
+*.xcuserstate
+.idea/*
+
+#
+*.DS_Store
+.DS_Store
+
+# CocoaPods
+Pods/
+
+# Gradle Build Scripts
+gradle/
+gradlew*
+*.gradle
+!ios-custom.gradle
+localbuild.sh
+
+# Temporary folder for build scripts
+buildhelpers/tmp
+
+# Arcadia
+buildhelpers/mini-arcadia
+
+# Suggest library and dictionary
+YKKeyboardKit/YKKeyboardKit/Resources/Dictionaries/Android/main_ru
+YKKeyboardKit/YKKeyboardKit/Vendor/Suggest/lib/*
