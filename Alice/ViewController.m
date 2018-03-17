@@ -125,7 +125,7 @@
 {
 //    [self addGiftWrappingCube];
     [self addDAECube];
-    [self addParticleSystem];
+//    [self addParticleSystem];
 }
 
 - (simd_float4x4)rotateMatrix:(simd_float4x4)tr byAngle:(float)angle onAxis:(NSString *)axis
@@ -177,7 +177,7 @@
     // Мне нужен чисто перенос от них! То есть я раньше умножал матрицу камеры на перенос по z на -0.5.
     // А теперь что? Я просто возьму матрицу переноса с некоторыми данными от камеры!
     
-    translation = [self rotateMatrix:translation byAngle:-M_PI onAxis:@"x"];
+    translation = [self rotateMatrix:translation byAngle:M_PI onAxis:@"y"];
     
 //    NSLog(@"x = %f", self.sceneView.session.currentFrame.camera.eulerAngles.x);
 //    NSLog(@"y = %f", self.sceneView.session.currentFrame.camera.eulerAngles.y);
@@ -246,8 +246,9 @@
 - (void)addParticleSystem
 {
     SCNParticleSystem *system = [SCNParticleSystem particleSystem];
-    system.particleLifeSpan = 3;
-    system.birthRate = 20;
+    system.particleLifeSpan = .5;
+    system.birthRate = 100;
+    system.particleImage = [UIImage imageNamed:@""];
     system.particleColor = [UIColor colorWithRed:0xB2 / 255.f green:0x26 / 255.f blue:1.f alpha:1.f];
     system.particleVelocity = 240;
     system.particleVelocityVariation = 240;
@@ -276,8 +277,18 @@
     for (SCNNode *node in scene.rootNode.childNodes) {
         SCNNode *cp = [node copy];
         [self setInFrontOfCameraTransformForNode:cp];
-        cp.scale = SCNVector3Make(1.f / 450.f, 1.f / 450.f, 1.f / 450.f);
+        cp.scale = SCNVector3Make(1.f / 4500.f, 1.f / 4500.f, 1.f / 4500.f);
         [self.sceneView.scene.rootNode addChildNode:cp];
+
+        NSUInteger num = 10;
+        SCNAction *rotation = [SCNAction rotateByX:0 y:0 z:M_PI duration:1. / num];
+        SCNAction *repeatedRotation = [SCNAction repeatAction:rotation count:num];
+
+        SCNAction *scaleAction = [SCNAction scaleTo:1.f / 450.f duration:1.];
+        SCNAction *g = [SCNAction group:@[repeatedRotation, scaleAction]];
+        [cp runAction:g completionHandler:^{
+            [self addParticleSystem];
+        }];
     }
 }
 
