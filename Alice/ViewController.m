@@ -32,6 +32,8 @@
     self.sceneView.showsStatistics = YES;
 //    self.sceneView.debugOptions = ARSCNDebugOptionShowFeaturePoints;
     
+    self.sceneView.autoenablesDefaultLighting = YES;
+
     // Create a new scene
     SCNScene *scene = [SCNScene scene];
     
@@ -123,6 +125,7 @@
 {
 //    [self addGiftWrappingCube];
     [self addDAECube];
+    [self addParticleSystem];
 }
 
 - (simd_float4x4)rotateMatrix:(simd_float4x4)tr byAngle:(float)angle onAxis:(NSString *)axis
@@ -157,6 +160,14 @@
     return translation;
 }
 
+- (simd_float4x4)matrixWithDepth:(CGFloat)depth
+{
+    simd_float4x4 translation = matrix_identity_float4x4;
+    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
+    translation.columns[3].z = depth;
+    return matrix_multiply(cameraTransform, translation);
+}
+
 - (void)setInFrontOfCameraTransformForNode:(SCNNode *)node
 {
     simd_float4x4 translation = matrix_identity_float4x4;
@@ -189,91 +200,89 @@
 //    node.simdEulerAngles = self.sceneView.session.currentFrame.camera.eulerAngles;
 //    node.simdPosition = simd_make_float3(self.sceneView.session.currentFrame.camera.)
 }
+//
+//- (void)setInFrontOfCameraTransformForNode_:(SCNNode *)node
+//{
+//    simd_float4x4 translation = matrix_identity_float4x4;
+//    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
+////    translation.columns[3].z = -.5f;
+//
+//    float tx = translation.columns[3].x = cameraTransform.columns[3].x;
+//    float ty = translation.columns[3].y = cameraTransform.columns[3].y;
+//    float tz = translation.columns[3].z = cameraTransform.columns[3].z - 0.5f;
+//    float tw = translation.columns[3].w = 1.f;
+//
+//    // cameraTransform вообще без переноса
+//
+////    cameraTransform.columns[0].x = 1;
+////    cameraTransform.columns[0].y = 0;
+////    cameraTransform.columns[0].z = 0;
+////    cameraTransform.columns[0].w = 0;
+////    cameraTransform.columns[1].x = 0;
+////    cameraTransform.columns[1].y = 1;
+////    cameraTransform.columns[1].z = 0;
+////    cameraTransform.columns[1].w = 0;
+////    cameraTransform.columns[2].x = 0;
+////    cameraTransform.columns[2].y = 0;
+////    cameraTransform.columns[2].z = 1;
+////    cameraTransform.columns[2].w = 0;
+////    cameraTransform.columns[3].w = 1;
+//
+//    // Мне нужен чисто перенос от них! То есть я умножаю матрицу
+//
+//    //    translation = [self rotateMatrix:translation byAngle:M_PI_2 onAxis:@"y"];
+////    translation = [self rotateMatrix:translation byAngle:-M_PI onAxis:@"x"];
+//    //    translation = [self rotateMatrix:translation byAngle:-self.sceneView.session.currentFrame.camera.eulerAngles.x onAxis:@"x"];
+//    //    translation.columns[0].x += cosf(M_PI_2);
+//    //    translation.columns[0].y += -sinf(M_PI_2);
+//    //    translation.columns[1].x += sinf(M_PI_2);
+//    //    translation.columns[1].y += cosf(M_PI_2);
+//
+////    node.simdWorldTransform = matrix_multiply(cameraTransform, translation);
+//    node.simdWorldTransform = translation;
+//
+//}
 
-- (void)setInFrontOfCameraTransformForNode_:(SCNNode *)node
+- (void)addParticleSystem
 {
-    simd_float4x4 translation = matrix_identity_float4x4;
-    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
-//    translation.columns[3].z = -.5f;
-    
-    float tx = translation.columns[3].x = cameraTransform.columns[3].x;
-    float ty = translation.columns[3].y = cameraTransform.columns[3].y;
-    float tz = translation.columns[3].z = cameraTransform.columns[3].z - 0.5f;
-    float tw = translation.columns[3].w = 1.f;
+    SCNParticleSystem *system = [SCNParticleSystem particleSystem];
+    system.particleLifeSpan = 3;
+    system.birthRate = 20;
+    system.particleColor = [UIColor colorWithRed:0xB2 / 255.f green:0x26 / 255.f blue:1.f alpha:1.f];
+    system.particleVelocity = 240;
+    system.particleVelocityVariation = 240;
+    system.particleAngle = 360;
+    system.particleAngleVariation = 360;
+    system.spreadingAngle = 180;
 
-    // cameraTransform вообще без переноса
+    system.particleSize = 1.f;
+    system.particleSizeVariation = .5;
     
-//    cameraTransform.columns[0].x = 1;
-//    cameraTransform.columns[0].y = 0;
-//    cameraTransform.columns[0].z = 0;
-//    cameraTransform.columns[0].w = 0;
-//    cameraTransform.columns[1].x = 0;
-//    cameraTransform.columns[1].y = 1;
-//    cameraTransform.columns[1].z = 0;
-//    cameraTransform.columns[1].w = 0;
-//    cameraTransform.columns[2].x = 0;
-//    cameraTransform.columns[2].y = 0;
-//    cameraTransform.columns[2].z = 1;
-//    cameraTransform.columns[2].w = 0;
-//    cameraTransform.columns[3].w = 1;
-
-    // Мне нужен чисто перенос от них! То есть я умножаю матрицу
+    [self.sceneView.scene addParticleSystem:system withTransform:(SCNMatrix4FromMat4([self matrixWithDepth:-100.f]))];
     
-    //    translation = [self rotateMatrix:translation byAngle:M_PI_2 onAxis:@"y"];
-//    translation = [self rotateMatrix:translation byAngle:-M_PI onAxis:@"x"];
-    //    translation = [self rotateMatrix:translation byAngle:-self.sceneView.session.currentFrame.camera.eulerAngles.x onAxis:@"x"];
-    //    translation.columns[0].x += cosf(M_PI_2);
-    //    translation.columns[0].y += -sinf(M_PI_2);
-    //    translation.columns[1].x += sinf(M_PI_2);
-    //    translation.columns[1].y += cosf(M_PI_2);
     
-//    node.simdWorldTransform = matrix_multiply(cameraTransform, translation);
-    node.simdWorldTransform = translation;
+//    Opacity 1
+//    scale 0
+//    Color change - 6325FF - B226FF
+    // ???
+//    Size Range 36,5
+//    Size delta 0,99
 
 }
 
 - (void)addDAECube
 {
-    
-    
-////    let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-////    let scene = SCNScene(named: documentsURL.absoluteString+"idle.dae")
-//
-////    NSString * resourcePath = [[NSBundle mainBundle] pathForResource:@"Excited" ofType:nil];
-//    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-//    NSString * resourcePath = [bundle pathForResource:@"eyes" ofType:@"png"];
-//
-//    NSError *e = nil;
-////
-////    NSArray *es = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:&e];
-////
-////    NSURL *documentsURL = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask].lastObject;
-////    NSArray *a = [[NSFileManager defaultManager] contentsOfDirectoryAtURL:documentsURL includingPropertiesForKeys:nil options:kNilOptions error:&e];
-//
-////    NSString *name = [resourcePath stringByAppendingPathComponent:@"Excited"];
-////    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:name isDirectory:nil];
-//
-//    BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:resourcePath isDirectory:nil];
-//    NSData *data = [NSData dataWithContentsOfFile:resourcePath];
-//
-////    SCNSceneSource *scr = [SCNSceneSource sceneSourceWithData:data options:nil];
-////    SCNScene *knucklesExcitedScene = [scr sceneWithOptions:nil error:&e];
-////    SCNScene *knucklesExcitedScene = [SCNScene
-
-    UIImage *eyes = [UIImage imageNamed:@"eyes"];
-
-//    SCNScene *scene = [SCNScene sceneNamed:@"art.scnassets/Excited.dae"];
-
     SCNScene *scene = [SCNScene sceneNamed:@"art.scnassets/BOX.obj"];
-
-//    self.sceneView.scene = scene;
-//
     for (SCNNode *node in scene.rootNode.childNodes) {
         SCNNode *cp = [node copy];
         [self setInFrontOfCameraTransformForNode:cp];
         cp.scale = SCNVector3Make(1.f / 450.f, 1.f / 450.f, 1.f / 450.f);
         [self.sceneView.scene.rootNode addChildNode:cp];
     }
+}
+
+- (void)addLightening
+{
 }
 
 @end
