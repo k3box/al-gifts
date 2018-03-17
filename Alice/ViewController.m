@@ -62,6 +62,15 @@
     [self.sceneView.session pause];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self addDAECube];
+    });
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Release any cached data, images, etc that aren't in use.
@@ -124,7 +133,7 @@
 - (void)tap
 {
 //    [self addGiftWrappingCube];
-    [self addDAECube];
+//      [self addDAECube];
 //    [self addParticleSystem];
 }
 
@@ -259,7 +268,10 @@
     system.particleSize = 2.f;
     system.particleSizeVariation = .5;
     
-    [self.sceneView.scene addParticleSystem:system withTransform:(SCNMatrix4FromMat4([self matrixWithDepth:-2.f]))];
+    [self.sceneView.scene addParticleSystem:system withTransform:(SCNMatrix4FromMat4([self matrixWithDepth:-100.f]))];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3.f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.sceneView.scene removeParticleSystem:system];
+    });
     
     
 //    Opacity 1
@@ -291,14 +303,9 @@
         SCNAction *g = [SCNAction group:@[scaleAction]];
 //        SCNAction *g = [SCNAction group:@[repeatedRotation, scaleAction]];
         [cp runAction:g completionHandler:^{
-            cp.opacity = 1.f;
             [self addParticleSystem];
         }];
     }
-}
-
-- (void)addLightening
-{
 }
 
 @end
