@@ -247,8 +247,8 @@
 {
     SCNParticleSystem *system = [SCNParticleSystem particleSystem];
     system.particleLifeSpan = .5;
-    system.birthRate = 100;
-    system.particleImage = [UIImage imageNamed:@""];
+    system.birthRate = 50;
+    system.particleImage = [UIImage imageNamed:@"star_particle"];
     system.particleColor = [UIColor colorWithRed:0xB2 / 255.f green:0x26 / 255.f blue:1.f alpha:1.f];
     system.particleVelocity = 240;
     system.particleVelocityVariation = 240;
@@ -256,10 +256,10 @@
     system.particleAngleVariation = 360;
     system.spreadingAngle = 180;
 
-    system.particleSize = 1.f;
+    system.particleSize = 2.f;
     system.particleSizeVariation = .5;
     
-    [self.sceneView.scene addParticleSystem:system withTransform:(SCNMatrix4FromMat4([self matrixWithDepth:-100.f]))];
+    [self.sceneView.scene addParticleSystem:system withTransform:(SCNMatrix4FromMat4([self matrixWithDepth:-2.f]))];
     
     
 //    Opacity 1
@@ -279,14 +279,19 @@
         [self setInFrontOfCameraTransformForNode:cp];
         cp.scale = SCNVector3Make(1.f / 4500.f, 1.f / 4500.f, 1.f / 4500.f);
         [self.sceneView.scene.rootNode addChildNode:cp];
+//        cp.opacity = 0.1f;
 
-        NSUInteger num = 10;
-        SCNAction *rotation = [SCNAction rotateByX:0 y:0 z:M_PI duration:1. / num];
+        NSUInteger num = 2;
+        SCNAction *rotation = [SCNAction rotateByX:0 y:0 z:M_PI * 2 duration:0.5 / num];
         SCNAction *repeatedRotation = [SCNAction repeatAction:rotation count:num];
+        SCNAction *fadingAction = [SCNAction fadeOpacityTo:0.3 duration:1.];
 
-        SCNAction *scaleAction = [SCNAction scaleTo:1.f / 450.f duration:1.];
-        SCNAction *g = [SCNAction group:@[repeatedRotation, scaleAction]];
+        SCNAction *scaleAction = [SCNAction scaleTo:1.f / 450.f duration:0.5];
+//        SCNAction *g = [SCNAction group:@[fadingAction, scaleAction]];
+        SCNAction *g = [SCNAction group:@[scaleAction]];
+//        SCNAction *g = [SCNAction group:@[repeatedRotation, scaleAction]];
         [cp runAction:g completionHandler:^{
+            cp.opacity = 1.f;
             [self addParticleSystem];
         }];
     }
