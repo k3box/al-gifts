@@ -15,13 +15,13 @@
     self = [super init];
     if (self != nil) {
 //        SCNGeometry *geometry = [SCNBox boxWithWidth:1.f height:1.f length:1.f chamferRadius:0.f];
-        SCNGeometry *geometry = [SCNBox boxWithWidth:.1f height:.1f length:.1f chamferRadius:0.f];
+        SCNGeometry *geometry = [SCNBox boxWithWidth:.1f height:.1f length:0.001f chamferRadius:0.f];
         self.geometry = geometry;
         SCNPhysicsShape *shape = [SCNPhysicsShape shapeWithGeometry:geometry options:@{}];
         self.physicsBody = [SCNPhysicsBody bodyWithType:SCNPhysicsBodyTypeDynamic shape:shape];
         [self.physicsBody setAffectedByGravity:NO];
         SCNMaterial *material = [SCNMaterial material];
-        material.diffuse.contents = [UIImage imageNamed:@"cherries"];
+        material.diffuse.contents = [UIImage imageNamed:@"c512_copy"];
         self.geometry.materials = @[material, material, material, material, material, material];
     }
     return self;

@@ -6,12 +6,15 @@
 //  Copyright © 2018 Vitaliy Karnienko. All rights reserved.
 //
 
+#import <CoreMotion/CoreMotion.h>
 #import "ViewController.h"
 #import "ALGiftWrappingCube.h"
 
 @interface ViewController () <ARSCNViewDelegate>
 
 @property (nonatomic, strong) IBOutlet ARSCNView *sceneView;
+@property (nonatomic, strong) SCNNode *DAEBoxNode;
+@property (nonatomic, strong) SCNParticleSystem *pSystem;
 
 @end
 
@@ -23,6 +26,7 @@
     
     UITapGestureRecognizer *rec = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tap)];
     rec.numberOfTapsRequired = 1;
+    rec.delegate = self;
     [self.sceneView addGestureRecognizer:rec];
     
     // Set the view's delegate
@@ -39,6 +43,30 @@
     
     // Set the scene to the view
     self.sceneView.scene = scene;
+    
+//    NSOperationQueue *operationQueue = [[NSOperationQueue alloc] init];
+//    [motionManager startDeviceMotionUpdates];
+//    [motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXArbitraryZVertical toQueue:operationQueue
+//                                                   withHandler:^(CMDeviceMotion *motion, NSError *error)
+//     {
+//             CGFloat x = motion.gravity.x;
+//             CGFloat y = motion.gravity.y;
+//             CGFloat z = motion.gravity.z;
+//             CGFloat angle = atan2(y, x) + M_PI_2;           // in radians
+//             CGFloat angleDegrees = angle * 180.0f / M_PI;   // in degrees
+//
+//         [self setInFrontOfCameraTransformForNode__:self.DAEBoxNode angle:angleDegrees];
+//     }];
+}
+
+- (void)setInFrontOfCameraTransformForNode__:(SCNNode *)node angle:(CGFloat)angleDegrees
+{
+    simd_float4x4 translation = matrix_identity_float4x4;
+    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
+    
+    translation = [self rotateMatrix:translation byAngle:angleDegrees onAxis:@"y"];
+    
+    node.simdWorldTransform = matrix_multiply(cameraTransform, translation);
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -133,7 +161,7 @@
 - (void)tap
 {
 //    [self addGiftWrappingCube];
-//      [self addDAECube];
+      [self addDAECube];
 //    [self addParticleSystem];
 }
 
@@ -167,6 +195,28 @@
 
     }
     return translation;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = touches.anyObject;
+    CGPoint loc = [touch locationInView:self.sceneView];
+    NSArray *h = [self.sceneView hitTest:loc options:nil];
+    if (h != nil && h.count > 0) {
+        if ([[h.firstObject node] isEqual:self.DAEBoxNode]) {
+            [self showSecondBox];
+        }
+    }
+}
+
+- (void)showSecondBox
+{
+    [self.sceneView.scene removeParticleSystem:self.pSystem];
+    [self.DAEBoxNode removeFromParentNode];
+
+    ALGiftWrappingCube *cube = [[ALGiftWrappingCube alloc] init];
+    [self setInFrontOfCameraTransformForNode:cube];
+    [self.sceneView.scene.rootNode addChildNode:cube];
 }
 
 - (simd_float4x4)matrixWithDepth:(CGFloat)depth
@@ -255,6 +305,7 @@
 - (void)addParticleSystem
 {
     SCNParticleSystem *system = [SCNParticleSystem particleSystem];
+    self.pSystem = system;
     system.particleLifeSpan = .5;
     system.birthRate = 50;
     system.particleImage = [UIImage imageNamed:@"star_particle"];
@@ -289,8 +340,22 @@
     for (SCNNode *node in scene.rootNode.childNodes) {
         SCNNode *cp = [node copy];
         [self setInFrontOfCameraTransformForNode:cp];
+        
+        
+        
+        CMMotionManager *motionManager = [[CMMotionManager alloc] init];
+        
+        CMAccelerometerData *ad = motionManager.accelerometerData;
+        CGFloat x = ad.acceleration.x;
+        CGFloat y = ad.acceleration.y;
+        CGFloat deg = atan2(y, x) + M_PI_2;
+        [self setInFrontOfCameraTransformForNode__:cp angle:deg];
+
+        
+        
         cp.scale = SCNVector3Make(1.f / 4500.f, 1.f / 4500.f, 1.f / 4500.f);
         [self.sceneView.scene.rootNode addChildNode:cp];
+        self.DAEBoxNode = cp;
 //        cp.opacity = 0.1f;
 
         NSUInteger num = 2;
