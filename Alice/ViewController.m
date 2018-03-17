@@ -121,14 +121,14 @@
 
 - (void)tap
 {
-    [self addGiftWrappingCube];
-//    [self addDAECube];
+//    [self addGiftWrappingCube];
+    [self addDAECube];
 }
 
 - (void)setInFrontOfCameraTransformForNode:(SCNNode *)node
 {
     simd_float4x4 translation = matrix_identity_float4x4;
-    translation.columns[3].z = -1;
+    translation.columns[3].z = -.5f;
     node.simdTransform = matrix_multiply(self.sceneView.session.currentFrame.camera.transform, translation);
 
 }
@@ -162,16 +162,19 @@
 ////    SCNScene *knucklesExcitedScene = [SCNScene
 
     UIImage *eyes = [UIImage imageNamed:@"eyes"];
-    
-//    SCNScene *scene = [SCNScene sceneNamed:@"art.scnassets/Excited.dae"];
-    
-    SCNScene *scene1 = [SCNScene sceneNamed:@"art.scnassets/ship.scn"];
 
+//    SCNScene *scene = [SCNScene sceneNamed:@"art.scnassets/Excited.dae"];
+
+    SCNScene *scene = [SCNScene sceneNamed:@"art.scnassets/BOX.obj"];
+
+//    self.sceneView.scene = scene;
 //
-//    for (SCNNode *node in knucklesExcitedScene.rootNode.childNodes) {
-//        [self setInFrontOfCameraTransformForNode:node];
-//        [self.sceneView.scene.rootNode addChildNode:node];
-//    }
+    for (SCNNode *node in scene.rootNode.childNodes) {
+        SCNNode *cp = [node copy];
+        [self setInFrontOfCameraTransformForNode:cp];
+        cp.scale = SCNVector3Make(1.f / 450.f, 1.f / 450.f, 1.f / 450.f);
+        [self.sceneView.scene.rootNode addChildNode:cp];
+    }
 }
 
 @end
