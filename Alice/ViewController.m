@@ -95,6 +95,7 @@
     [super viewDidAppear:animated];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+     //  [self addGiftWrappingCube];
         [self addDAECube];
     });
 }
@@ -153,7 +154,8 @@
 //    SCNVector3 position = SCNVector3Make(orientation.x, orientation.y, orientation.z - .5f);
 //    cube.worldPosition = position;
 
-    [self setInFrontOfCameraTransformForNode:cube];
+    [self setInFrontOfCameraTransformForNode:cube shouldRot:YES];
+    [cube setScale:SCNVector3Make(0.8, 0.8, 0.8)];
 
     [self.sceneView.scene.rootNode addChildNode:cube];
 }
@@ -161,7 +163,7 @@
 - (void)tap
 {
 //    [self addGiftWrappingCube];
-      [self addDAECube];
+//      [self addDAECube];
 //    [self addParticleSystem];
 }
 
@@ -214,9 +216,10 @@
     [self.sceneView.scene removeParticleSystem:self.pSystem];
     [self.DAEBoxNode removeFromParentNode];
 
-    ALGiftWrappingCube *cube = [[ALGiftWrappingCube alloc] init];
-    [self setInFrontOfCameraTransformForNode:cube];
-    [self.sceneView.scene.rootNode addChildNode:cube];
+    [self addGiftWrappingCube];
+//    ALGiftWrappingCube *cube = [[ALGiftWrappingCube alloc] init];
+//    [self setInFrontOfCameraTransformForNode:cube];
+//    [self.sceneView.scene.rootNode addChildNode:cube];
 }
 
 - (simd_float4x4)matrixWithDepth:(CGFloat)depth
@@ -227,7 +230,7 @@
     return matrix_multiply(cameraTransform, translation);
 }
 
-- (void)setInFrontOfCameraTransformForNode:(SCNNode *)node
+- (void)setInFrontOfCameraTransformForNode:(SCNNode *)node shouldRot:(BOOL)sr
 {
     simd_float4x4 translation = matrix_identity_float4x4;
     simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
@@ -236,13 +239,15 @@
     // Мне нужен чисто перенос от них! То есть я раньше умножал матрицу камеры на перенос по z на -0.5.
     // А теперь что? Я просто возьму матрицу переноса с некоторыми данными от камеры!
     
-    translation = [self rotateMatrix:translation byAngle:M_PI onAxis:@"y"];
+    if (sr) {
+        translation = [self rotateMatrix:translation byAngle:M_PI onAxis:@"y"];
+    }
     
-//    NSLog(@"x = %f", self.sceneView.session.currentFrame.camera.eulerAngles.x);
-//    NSLog(@"y = %f", self.sceneView.session.currentFrame.camera.eulerAngles.y);
-//    NSLog(@"z = %f", self.sceneView.session.currentFrame.camera.eulerAngles.z);
-
-//       translation = [self rotateMatrix:translation byAngle:self.sceneView.session.currentFrame.camera.eulerAngles.x onAxis:@"y"];
+    //    NSLog(@"x = %f", self.sceneView.session.currentFrame.camera.eulerAngles.x);
+    //    NSLog(@"y = %f", self.sceneView.session.currentFrame.camera.eulerAngles.y);
+    //    NSLog(@"z = %f", self.sceneView.session.currentFrame.camera.eulerAngles.z);
+    
+    //       translation = [self rotateMatrix:translation byAngle:self.sceneView.session.currentFrame.camera.eulerAngles.x onAxis:@"y"];
     
     
     
@@ -252,13 +257,29 @@
     //    translation.columns[1].y += cosf(M_PI_2);
     
     node.simdWorldTransform = matrix_multiply(cameraTransform, translation);
-
-//    SCNBillboardConstraint *constraint = [[SCNBillboardConstraint alloc] init];
-//    constraint.freeAxes = SCNBillboardAxisY;
-//    node.constraints = @[constraint];
-//    node.simdEulerAngles = self.sceneView.session.currentFrame.camera.eulerAngles;
-//    node.simdPosition = simd_make_float3(self.sceneView.session.currentFrame.camera.)
+    
+    //    SCNBillboardConstraint *constraint = [[SCNBillboardConstraint alloc] init];
+    //    constraint.freeAxes = SCNBillboardAxisY;
+    //    node.constraints = @[constraint];
+    //    node.simdEulerAngles = self.sceneView.session.currentFrame.camera.eulerAngles;
+    //    node.simdPosition = simd_make_float3(self.sceneView.session.currentFrame.camera.)
 }
+
+//- (void)setInFrontOfCameraTransformForNode:(SCNNode *)node shouldRot:(BOOL)sr
+//{
+//    simd_float4x4 translation = matrix_identity_float4x4;
+//    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
+//    translation.columns[3].z = -.5f;
+//
+//    // Мне нужен чисто перенос от них! То есть я раньше умножал матрицу камеры на перенос по z на -0.5.
+//    // А теперь что? Я просто возьму матрицу переноса с некоторыми данными от камеры!
+//
+//    if (sr) {
+//        translation = [self rotateMatrix:translation byAngle:M_PI onAxis:@"y"];
+//    }
+//
+//    node.simdWorldTransform = matrix_multiply(cameraTransform, translation);
+//}
 //
 //- (void)setInFrontOfCameraTransformForNode_:(SCNNode *)node
 //{
@@ -339,17 +360,17 @@
     SCNScene *scene = [SCNScene sceneNamed:@"art.scnassets/BOX.obj"];
     for (SCNNode *node in scene.rootNode.childNodes) {
         SCNNode *cp = [node copy];
-        [self setInFrontOfCameraTransformForNode:cp];
+        [self setInFrontOfCameraTransformForNode:cp shouldRot:YES];
         
         
         
-        CMMotionManager *motionManager = [[CMMotionManager alloc] init];
-        
-        CMAccelerometerData *ad = motionManager.accelerometerData;
-        CGFloat x = ad.acceleration.x;
-        CGFloat y = ad.acceleration.y;
-        CGFloat deg = atan2(y, x) + M_PI_2;
-        [self setInFrontOfCameraTransformForNode__:cp angle:deg];
+//        CMMotionManager *motionManager = [[CMMotionManager alloc] init];
+//
+//        CMAccelerometerData *ad = motionManager.accelerometerData;
+//        CGFloat x = ad.acceleration.x;
+//        CGFloat y = ad.acceleration.y;
+//        CGFloat deg = atan2(y, x) + M_PI_2;
+//        [self setInFrontOfCameraTransformForNode__:cp angle:deg];
 
         
         

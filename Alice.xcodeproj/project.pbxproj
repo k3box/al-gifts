@@ -17,6 +17,8 @@
 		5D1058B4205C469E00F3EA84 /* ALGiftWrappingCube.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D1058B2205C469E00F3EA84 /* ALGiftWrappingCube.m */; };
 		5D278F94205C7C68006C39A3 /* eyes.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D278F91205C7C68006C39A3 /* eyes.png */; };
 		5D278F95205C7C68006C39A3 /* color.png in Resources */ = {isa = PBXBuildFile; fileRef = 5D278F92205C7C68006C39A3 /* color.png */; };
+		5DC8A962205D66C900488EC6 /* B.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC8A960205D66C800488EC6 /* B.png */; };
+		5DC8A963205D66C900488EC6 /* A.png in Resources */ = {isa = PBXBuildFile; fileRef = 5DC8A961205D66C900488EC6 /* A.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +37,8 @@
 		5D1058B3205C469E00F3EA84 /* ALGiftWrappingCube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ALGiftWrappingCube.h; path = Alice/Gifts/Wrappings/Cube/ALGiftWrappingCube.h; sourceTree = SOURCE_ROOT; };
 		5D278F91205C7C68006C39A3 /* eyes.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = eyes.png; sourceTree = "<group>"; };
 		5D278F92205C7C68006C39A3 /* color.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = color.png; sourceTree = "<group>"; };
+		5DC8A960205D66C800488EC6 /* B.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = B.png; sourceTree = "<group>"; };
+		5DC8A961205D66C900488EC6 /* A.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = A.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +80,8 @@
 				5D105894205C376200F3EA84 /* ViewController.m */,
 				5D105896205C376200F3EA84 /* Main.storyboard */,
 				5D105899205C376200F3EA84 /* Assets.xcassets */,
+				5DC8A961205D66C900488EC6 /* A.png */,
+				5DC8A960205D66C800488EC6 /* B.png */,
 				5D10589B205C376200F3EA84 /* LaunchScreen.storyboard */,
 				5D10589E205C376200F3EA84 /* Info.plist */,
 				5D10589F205C376200F3EA84 /* main.m */,
@@ -177,6 +183,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				5D278F95205C7C68006C39A3 /* color.png in Resources */,
+				5DC8A963205D66C900488EC6 /* A.png in Resources */,
+				5DC8A962205D66C900488EC6 /* B.png in Resources */,
 				5D105892205C376200F3EA84 /* art.scnassets in Resources */,
 				5D10589D205C376200F3EA84 /* LaunchScreen.storyboard in Resources */,
 				5D10589A205C376200F3EA84 /* Assets.xcassets in Resources */,
