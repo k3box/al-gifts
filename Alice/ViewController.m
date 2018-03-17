@@ -125,11 +125,52 @@
     [self addDAECube];
 }
 
+- (simd_float4x4)rotateMatrix:(simd_float4x4)tr byAngle:(float)angle onAxis:(NSString *)axis
+{
+    simd_float4x4 translation = tr;
+    if ([axis isEqualToString:@"x"]) {
+        translation.columns[0].x += 1;
+        translation.columns[1].y += cosf(angle);
+        translation.columns[2].y += -sinf(angle);
+        translation.columns[1].z += sinf(angle);
+        translation.columns[2].z += cosf(angle);
+    }
+    if ([axis isEqualToString:@"y"]) {
+        translation.columns[0].x += cosf(-angle);
+        translation.columns[2].x += -sinf(-angle);
+        translation.columns[1].y += 1;
+        translation.columns[0].z += sinf(-angle);
+        translation.columns[2].z += cosf(-angle);
+    }
+    if ([axis isEqualToString:@"z"]) {
+        translation.columns[0].x += cosf(angle);
+        translation.columns[1].x += -sinf(angle);
+        translation.columns[0].y += sinf(angle);
+        translation.columns[1].y += cosf(angle);
+        translation.columns[2].z += 1;
+//        translation.columns[0].x += cosf(angle);
+//        translation.columns[0].y += -sinf(angle);
+//        translation.columns[1].x += sinf(angle);
+//        translation.columns[1].y += cosf(angle);
+
+    }
+    return translation;
+}
+
 - (void)setInFrontOfCameraTransformForNode:(SCNNode *)node
 {
     simd_float4x4 translation = matrix_identity_float4x4;
+    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
     translation.columns[3].z = -.5f;
-    node.simdTransform = matrix_multiply(self.sceneView.session.currentFrame.camera.transform, translation);
+    
+//    translation = [self rotateMatrix:translation byAngle:M_PI_2 onAxis:@"y"];
+    translation = [self rotateMatrix:translation byAngle:-M_PI onAxis:@"x"];
+//    translation.columns[0].x += cosf(M_PI_2);
+//    translation.columns[0].y += -sinf(M_PI_2);
+//    translation.columns[1].x += sinf(M_PI_2);
+//    translation.columns[1].y += cosf(M_PI_2);
+
+    node.simdWorldTransform = matrix_multiply(cameraTransform, translation);
 
 }
 
