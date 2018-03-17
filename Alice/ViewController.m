@@ -15,7 +15,7 @@
 
 @end
 
-    
+
 @implementation ViewController
 
 - (void)viewDidLoad {
@@ -192,7 +192,7 @@
 //    NSLog(@"y = %f", self.sceneView.session.currentFrame.camera.eulerAngles.y);
 //    NSLog(@"z = %f", self.sceneView.session.currentFrame.camera.eulerAngles.z);
 
-//       translation = [self rotateMatrix:translation byAngle:self.sceneView.session.currentFrame.camera.eulerAngles.x onAxis:@"x"];
+//       translation = [self rotateMatrix:translation byAngle:self.sceneView.session.currentFrame.camera.eulerAngles.x onAxis:@"y"];
     
     
     
