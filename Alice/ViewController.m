@@ -236,9 +236,6 @@
     simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
     translation.columns[3].z = -.5f;
     
-    // Мне нужен чисто перенос от них! То есть я раньше умножал матрицу камеры на перенос по z на -0.5.
-    // А теперь что? Я просто возьму матрицу переноса с некоторыми данными от камеры!
-    
     if (sr) {
         translation = [self rotateMatrix:translation byAngle:M_PI onAxis:@"y"];
     }
@@ -265,63 +262,61 @@
     //    node.simdPosition = simd_make_float3(self.sceneView.session.currentFrame.camera.)
 }
 
-//- (void)setInFrontOfCameraTransformForNode:(SCNNode *)node shouldRot:(BOOL)sr
-//{
-//    simd_float4x4 translation = matrix_identity_float4x4;
-//    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
+- (void)setInFrontOfCameraTransformForNode__:(SCNNode *)node shouldRot:(BOOL)sr
+{
+    simd_float4x4 translation = matrix_identity_float4x4;
+    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
+    translation.columns[3].z = -.5f;
+
+    if (sr) {
+        translation = [self rotateMatrix:translation byAngle:(M_PI - M_PI_4) onAxis:@"y"];
+//        translation = [self rotateMatrix:translation byAngle:M_PI_4 onAxis:@"z"];
+    }
+
+    node.simdWorldTransform = matrix_multiply(cameraTransform, translation);
+}
+
+- (void)setInFrontOfCameraTransformForNode_:(SCNNode *)node
+{
+    simd_float4x4 translation = matrix_identity_float4x4;
+    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
 //    translation.columns[3].z = -.5f;
-//
-//    // Мне нужен чисто перенос от них! То есть я раньше умножал матрицу камеры на перенос по z на -0.5.
-//    // А теперь что? Я просто возьму матрицу переноса с некоторыми данными от камеры!
-//
-//    if (sr) {
-//        translation = [self rotateMatrix:translation byAngle:M_PI onAxis:@"y"];
-//    }
-//
+
+    float tx = translation.columns[3].x = cameraTransform.columns[3].x;
+    float ty = translation.columns[3].y = cameraTransform.columns[3].y;
+    float tz = translation.columns[3].z = cameraTransform.columns[3].z - 0.5f;
+    float tw = translation.columns[3].w = 1.f;
+
+    // cameraTransform вообще без переноса
+
+//    cameraTransform.columns[0].x = 1;
+//    cameraTransform.columns[0].y = 0;
+//    cameraTransform.columns[0].z = 0;
+//    cameraTransform.columns[0].w = 0;
+//    cameraTransform.columns[1].x = 0;
+//    cameraTransform.columns[1].y = 1;
+//    cameraTransform.columns[1].z = 0;
+//    cameraTransform.columns[1].w = 0;
+//    cameraTransform.columns[2].x = 0;
+//    cameraTransform.columns[2].y = 0;
+//    cameraTransform.columns[2].z = 1;
+//    cameraTransform.columns[2].w = 0;
+//    cameraTransform.columns[3].w = 1;
+
+    // Мне нужен чисто перенос от них! То есть я умножаю матрицу
+
+    //    translation = [self rotateMatrix:translation byAngle:M_PI_2 onAxis:@"y"];
+//    translation = [self rotateMatrix:translation byAngle:-M_PI onAxis:@"x"];
+    //    translation = [self rotateMatrix:translation byAngle:-self.sceneView.session.currentFrame.camera.eulerAngles.x onAxis:@"x"];
+    //    translation.columns[0].x += cosf(M_PI_2);
+    //    translation.columns[0].y += -sinf(M_PI_2);
+    //    translation.columns[1].x += sinf(M_PI_2);
+    //    translation.columns[1].y += cosf(M_PI_2);
+
 //    node.simdWorldTransform = matrix_multiply(cameraTransform, translation);
-//}
-//
-//- (void)setInFrontOfCameraTransformForNode_:(SCNNode *)node
-//{
-//    simd_float4x4 translation = matrix_identity_float4x4;
-//    simd_float4x4 cameraTransform = self.sceneView.session.currentFrame.camera.transform;
-////    translation.columns[3].z = -.5f;
-//
-//    float tx = translation.columns[3].x = cameraTransform.columns[3].x;
-//    float ty = translation.columns[3].y = cameraTransform.columns[3].y;
-//    float tz = translation.columns[3].z = cameraTransform.columns[3].z - 0.5f;
-//    float tw = translation.columns[3].w = 1.f;
-//
-//    // cameraTransform вообще без переноса
-//
-////    cameraTransform.columns[0].x = 1;
-////    cameraTransform.columns[0].y = 0;
-////    cameraTransform.columns[0].z = 0;
-////    cameraTransform.columns[0].w = 0;
-////    cameraTransform.columns[1].x = 0;
-////    cameraTransform.columns[1].y = 1;
-////    cameraTransform.columns[1].z = 0;
-////    cameraTransform.columns[1].w = 0;
-////    cameraTransform.columns[2].x = 0;
-////    cameraTransform.columns[2].y = 0;
-////    cameraTransform.columns[2].z = 1;
-////    cameraTransform.columns[2].w = 0;
-////    cameraTransform.columns[3].w = 1;
-//
-//    // Мне нужен чисто перенос от них! То есть я умножаю матрицу
-//
-//    //    translation = [self rotateMatrix:translation byAngle:M_PI_2 onAxis:@"y"];
-////    translation = [self rotateMatrix:translation byAngle:-M_PI onAxis:@"x"];
-//    //    translation = [self rotateMatrix:translation byAngle:-self.sceneView.session.currentFrame.camera.eulerAngles.x onAxis:@"x"];
-//    //    translation.columns[0].x += cosf(M_PI_2);
-//    //    translation.columns[0].y += -sinf(M_PI_2);
-//    //    translation.columns[1].x += sinf(M_PI_2);
-//    //    translation.columns[1].y += cosf(M_PI_2);
-//
-////    node.simdWorldTransform = matrix_multiply(cameraTransform, translation);
-//    node.simdWorldTransform = translation;
-//
-//}
+    node.simdWorldTransform = translation;
+
+}
 
 - (void)addParticleSystem
 {
